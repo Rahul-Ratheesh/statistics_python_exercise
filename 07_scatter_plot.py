@@ -20,25 +20,13 @@ def importData(filename):
 					data[headers[index]].append(value)
 	return data
 
-def replaceColumn(data, column):
-	data[column] = ['Female' if value == 0 else 'Male' for value in data[column]]
-	return data
-
-
-def groupData(data):
-	print(data.values())
-	record = list(data.values())
-
-	return data
-
 data = importData(FILENAME)
 # print(data)
 data['gender'] = ['Female' if value == 0 else 'Male' for value in data['gender']]
 # print(data)
 
-record = list(data.values())
 male_height, male_weight, female_height, female_weight = [], [], [], []
-for gender, height, weight in zip(record[0], record[1], record[2]):
+for gender, height, weight in zip(*list(data.values())):
 	if gender == 'Male':
 		male_height.append(height)
 		male_weight.append(weight)
