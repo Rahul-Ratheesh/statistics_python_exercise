@@ -13,7 +13,6 @@ def importData(filename):
 				data[headers[index]].append(value)
 	return data
 
-
-table = importData(FILENAME)
-gender = ['Female' if g == '1' else 'Male' for g in table['Gender']]
+data = importData(FILENAME)
+gender = ['Female' if g == '1' else 'Male' for g in data['Gender']]
 print(gender)
