@@ -12,22 +12,17 @@ def importData(filename):
 		for line in dataFile:
 			datarecord = line.strip().split(DELIMITER)
 			for index, value in enumerate(datarecord):
-				try:
-					value = int(value)
-				except:
-					data[headers[index]].append(value)
-				else:
-					data[headers[index]].append(value)
+				data[headers[index]].append(value)
 	return data
 
 data = importData(FILENAME)
-gestation = data['gestation']
-longevity = data['longevity']
-print(numpy.corrcoef(gestation, longevity))
+gestations = [int(gestation) for gestation in data['gestation']]
+longevitys = [int(longevity) for longevity in data['longevity']]
+print(numpy.corrcoef(gestations, longevitys))
 
 figure = pylab.figure()    
 plot = figure.add_subplot(1, 1, 1)
-pylab.scatter(gestation, longevity, color = 'steelblue')
+pylab.scatter(gestations, longevitys, color = 'steelblue')
 pylab.title('Gestation vs Longevity in Animals')
 pylab.xlabel('Gestation')
 pylab.ylabel('Longevity')
