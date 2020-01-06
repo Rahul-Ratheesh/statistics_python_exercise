@@ -15,21 +15,9 @@ def importData(filename):
 				data[headers[index]].append(value)
 	return data
 
-def buildDataRecords(data):
-	records = []
-	for index, key in enumerate(data):
-		records.append(data[key])
-	table = {}
-	for attribute_1, attribute_2 in list(zip(records[0], records[1])):
-		if table.get(attribute_1) is None:
-			table[attribute_1] = [attribute_2]
-		else:
-			table[attribute_1].append(attribute_2)
-	return table
-
-def buildPivotTable(attribute):
+def buildPivotTable(values):
 	props = {}
-	for data in attribute:
+	for data in values:
 		count = props.get(data)
 		if count is None:
 			props[data] = 1
@@ -52,34 +40,40 @@ def buildPercentageTable(twoWayTable):
 	return percentTable 
 
 data = importData(FILENAME)
-dataRecords = buildDataRecords(data)
-twoWayTable = buildTwoWayTable(dataRecords)
+
+lightGroup = {}
+for lightType, nearsightedness in zip(*list(data.values())):
+    if lightGroup.get(lightType) is None:
+        lightGroup[lightType] = [nearsightedness]
+    else:
+        lightGroup[lightType].append(nearsightedness)
+
+twoWayTable = buildTwoWayTable(lightGroup)
 percentTable = buildPercentageTable(twoWayTable)
 print(percentTable)
 
-responses = {}
+summary = {}
 for x in percentTable:
-	for y in percentTable[x]:
-		if responses.get(y) is None: 
-			responses[y] = [percentTable[x][y]]
-		else:
-			responses[y].append(percentTable[x][y])
-print(responses)
-keys = list(responses.keys())
-values = list(responses.values())
+    for y in percentTable[x]:
+        if summary.get(y) is None: 
+            summary[y] = [percentTable[x][y]]
+        else:
+            summary[y].append(percentTable[x][y])
+print(summary)
+keys = list(summary.keys())
+values = list(summary.values())
 bar_width = 0.35
 N = len(percentTable)
 index = numpy.arange(N)
 
 for i in range(len(values)):
-	pylab.bar(index + bar_width*i, values[i], bar_width, label=keys[i])
+    pylab.bar(index + bar_width*i, values[i], bar_width, label=keys[i])
 
 pylab.title('Lighting Conditions and Near Sightedness')
 pylab.xticks(index + bar_width, list(percentTable.keys()))
 pylab.ylabel('Near Sightedness')
 pylab.legend()
 pylab.show()
-
 
 
 
