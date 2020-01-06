@@ -12,23 +12,15 @@ def importData(filename):
 		for line in dataFile:
 			datarecord = line.strip().split(DELIMITER)
 			for index, value in enumerate(datarecord):
-				try:
-					value = int(value)
-				except:
-					data[headers[index]].append(value)
-				else:
-					data[headers[index]].append(value)
+				data[headers[index]].append(value)
 	return data
 
 data = importData(FILENAME)
-# print(data)
-years = data['Year']
+years = [int(year) for year in data['Year']]
 times = [float(time) for time in data['Time']]
 
 years = pylab.array(years)
-# print(years)
 times = pylab.array(times)
-# print(times)
 
 figure = pylab.figure()    
 plot = figure.add_subplot(1, 1, 1)
