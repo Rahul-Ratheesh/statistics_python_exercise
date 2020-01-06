@@ -12,30 +12,22 @@ def importData(filename):
 		for line in dataFile:
 			datarecord = line.strip().split(DELIMITER)
 			for index, value in enumerate(datarecord):
-				try:
-					value = int(value)
-				except:
-					data[headers[index]].append(value)
-				else:
-					data[headers[index]].append(value)
+				data[headers[index]].append(value)
 	return data
 
 data = importData(FILENAME)
-# print(data)
-data['gender'] = ['Female' if value == 0 else 'Male' for value in data['gender']]
-# print(data)
+data['gender'] = ['Female' if value == '0' else 'Male' for value in data['gender']]
+data['height'] = [int(height) for height in data['height']]
+data['weight'] = [int(weight) for weight in data['weight']]
 
 male_height, male_weight, female_height, female_weight = [], [], [], []
 for gender, height, weight in zip(*list(data.values())):
-	if gender == 'Male':
-		male_height.append(height)
-		male_weight.append(weight)
-	else:
-		female_height.append(height)
-		female_weight.append(weight)		
-
-# heights = data['height']
-# weights = data['weight']
+    if gender == 'Male':
+        male_height.append(height)
+        male_weight.append(weight)
+    else:
+        female_height.append(height)
+        female_weight.append(weight)
 
 figure = pylab.figure()    
 plot = figure.add_subplot(1, 1, 1)
