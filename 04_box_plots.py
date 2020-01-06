@@ -4,19 +4,25 @@ FILENAME = './data/graduation.csv'
 DELIMITER = ','
 
 def importData(filename):
+	data = {}
 	with open(filename, 'r') as dataFile:
 		headers = dataFile.readline().strip().split(DELIMITER)
-		colleges = {}
+		for header in headers:
+			data[header] = []
 		for line in dataFile:
-			name, grad_percent = line.strip().split(DELIMITER)
-			if colleges.get(name) is None:
-				colleges[name] = [float(grad_percent)]
-			else:
-				colleges[name].append(float(grad_percent))
-	return colleges
+			datarecord = line.strip().split(DELIMITER)
+			for index, value in enumerate(datarecord):
+				data[headers[index]].append(value)
+	return data
 
-colleges = importData(FILENAME)
-result = pylab.boxplot(colleges.values(), 
-	labels = ['College A', 'College B', 'College C', 'College D', 'College E', 'College F'])
-# print(result)
+data = importData(FILENAME)
+collegeGroup = {}
+for college, gradPercent in zip(*list(data.values())):
+    if collegeGroup.get(college) is None:
+        collegeGroup[college] = [float(gradPercent)]
+    else:
+        collegeGroup[college].append(float(gradPercent))
+
+pylab.boxplot(collegeGroup.values(), labels = ['College A', 'College B', 'College C', 'College D', 'College E', 'College F'])
+pylab.ylabel('Graduation Percent')
 pylab.show()
