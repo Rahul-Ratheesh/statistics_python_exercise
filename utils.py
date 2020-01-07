@@ -14,6 +14,15 @@ def importData(filename):
 				data[headers[index]].append(value)
 	return data
 
+def groupBy(values, column):
+	group = {}
+	for value, col in zip(values, column):
+		if group.get(col) is None:
+			group[col] = [value]
+		else:
+			group[col].append(value)
+	return group
+
 def buildPivotTable(values):
 	props = {}
 	for data in values:
@@ -23,6 +32,20 @@ def buildPivotTable(values):
 		else:
 			props[data] = count + 1
 	return props
+
+def buildTwoWayTable(table):
+	twoWayTable = {}
+	for index, key in enumerate(table):
+		twoWayTable[key] = buildPivotTable(table[key])
+	return twoWayTable
+
+def buildPercentageTable(twoWayTable):
+	percentTable = {}
+	for row in twoWayTable:
+		percentTable[row] = {}
+		for col in twoWayTable[row]:
+			percentTable[row][col] = round((twoWayTable[row][col] / sum(twoWayTable[row].values())) * 100, 2)
+	return percentTable
 
 def fiveNumberSummary(values):
 	return {
